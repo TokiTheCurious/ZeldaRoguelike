@@ -1,7 +1,23 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Characters/Blinky.tscn" type="PackedScene" id=1]
+[ext_resource path="res://World/Destructables/GenericDestructable.tscn" type="PackedScene" id=2]
 
 [node name="Playground" type="Node2D"]
 
 [node name="Blinky" parent="." instance=ExtResource( 1 )]
+position = Vector2( 183.849, 36.9018 )
+
+[node name="Destructable" parent="." instance=ExtResource( 2 )]
+
+[node name="Destructable2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 64.6923, 192.531 )
+
+[node name="Destructable3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 324.692, 197.531 )
+
+[node name="Destructable4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 659.692, 116.531 )
+
+[node name="Destructable5" parent="." instance=ExtResource( 2 )]
+position = Vector2( 410.692, 56.5305 )

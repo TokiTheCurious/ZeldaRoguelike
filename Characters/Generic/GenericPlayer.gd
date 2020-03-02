@@ -7,7 +7,9 @@ export var speed = 400
 export var attacks = []
 export var is_halted = false
 
+
 var viewport
+var player_direction: Vector2 = Vector2(1,0)
 
 func _ready():
 	viewport = get_viewport()
@@ -17,18 +19,24 @@ func handle_attacks():
 		return
 	if Input.is_key_pressed(KEY_D):
 		$AnimatedSprite.play(attacks[randi() % attacks.size()])
+		var attack_col = $Attack/AttackColliderLeft if $AnimatedSprite.is_flipped_h() else $Attack/AttackColliderRight 
+		attack_col.disabled = false
+		
 		is_halted = true				
 		yield($AnimatedSprite, "animation_finished")
 		is_halted = false
+		attack_col.disabled = true
+		
 		$AnimatedSprite.play("idle")
 	elif Input.is_key_pressed(KEY_S):
 		if(!viewport.get_node("Boomerang")):
-			print_debug('spawn boomerang')
 			var boom = Boomerang.instance()
 			boom.set_position(position)
 			boom.set_return_reference($".")
+			boom.set_throw_direction(player_direction) 
 			viewport.add_child(boom)
 				
+
 
 func handle_walking(delta):
 	if(is_halted):
@@ -43,7 +51,8 @@ func handle_walking(delta):
 	if Input.is_action_pressed("ui_up"):
 		velocity.y -= 1
 	if velocity.length() > 0:
-		position += velocity.normalized() * speed * delta
+		move_and_collide(velocity.normalized() * speed * delta)
+		player_direction = velocity.normalized()
 		$AnimatedSprite.play("walking")
 		if(velocity.x != 0):
 			$AnimatedSprite.flip_h = velocity.x < 0
@@ -54,3 +63,16 @@ func handle_walking(delta):
 func _process(delta):
 	handle_attacks()	
 	handle_walking(delta)
+
+
+func _on_Attack_body_entered(body):
+	pass
+	#print_debug(body.name)
+	#if(body.is_in_group("Attackable")):
+#		body.take_damage()
+
+
+func _on_Attack_area_entered(area):
+	print_debug(area.name)
+	if(area.is_in_group("Attackable")):
+		area.take_damage()
