@@ -4,7 +4,7 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 
-[node name="Destructable" type="Area2D" groups=[
+[node name="Destructable" type="StaticBody2D" groups=[
 "Attackable",
 ]]
 position = Vector2( 42.6923, 36.5305 )

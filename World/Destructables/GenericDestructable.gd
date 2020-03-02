@@ -1,4 +1,4 @@
-extends Area2D
+extends StaticBody2D
 
 export var Health = 1
 
@@ -15,3 +15,5 @@ func take_damage():
 	Health -= 1
 	if(Health <= 0):
 		destroy()
+
+

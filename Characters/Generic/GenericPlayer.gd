@@ -2,6 +2,7 @@ class_name GenericPlayer
 extends KinematicBody2D
 
 export (PackedScene) var Boomerang
+export (PackedScene) var Bomb
 
 export var speed = 400
 export var attacks = []
@@ -26,16 +27,19 @@ func handle_attacks():
 		yield($AnimatedSprite, "animation_finished")
 		is_halted = false
 		attack_col.disabled = true
-		
 		$AnimatedSprite.play("idle")
 	elif Input.is_key_pressed(KEY_S):
-		if(!viewport.get_node("Boomerang")):
+		if(!viewport.has_node("Boomerang")):
 			var boom = Boomerang.instance()
 			boom.set_position(position)
 			boom.set_return_reference($".")
 			boom.set_throw_direction(player_direction) 
 			viewport.add_child(boom)
-				
+	elif Input.is_key_pressed(KEY_X):
+		if(!viewport.has_node("Bomb")):
+			var bomb = Bomb.instance()
+			bomb.set_position(position)
+			viewport.add_child(bomb)
 
 
 func handle_walking(delta):
@@ -65,14 +69,13 @@ func _process(delta):
 	handle_walking(delta)
 
 
-func _on_Attack_body_entered(body):
-	pass
-	#print_debug(body.name)
-	#if(body.is_in_group("Attackable")):
-#		body.take_damage()
-
-
 func _on_Attack_area_entered(area):
 	print_debug(area.name)
 	if(area.is_in_group("Attackable")):
 		area.take_damage()
+
+
+func _on_Attack_body_entered(body):
+	print_debug(body.name)
+	if(body.is_in_group("Attackable")):
+		body.take_damage()
