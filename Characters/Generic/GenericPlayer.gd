@@ -42,8 +42,38 @@ func handle_attacks():
 			viewport.add_child(bomb)
 
 
-func handle_walking(delta):
-	if(is_halted):
+#func handle_walking(delta):
+#	#if(is_halted):
+#	#	return
+#
+#	var velocity = Vector2()  # The player's movement vector.
+#	if Input.is_action_pressed("ui_right"):
+#		velocity.x += 1
+#	if Input.is_action_pressed("ui_left"):
+#		velocity.x -= 1
+#	if Input.is_action_pressed("ui_down"):
+#		velocity.y += 1
+#	if Input.is_action_pressed("ui_up"):
+#		velocity.y -= 1
+#	if velocity.length() > 0:
+#		move_and_collide(velocity.normalized() * speed * delta)
+#		player_direction = velocity.normalized()
+#		$AnimatedSprite.play("walking")
+#		if(velocity.x != 0):
+#			$AnimatedSprite.flip_h = velocity.x < 0
+#	else:
+#		$AnimatedSprite.play("idle")
+
+#override to play animation
+func handle_attack():
+	print_debug("attack from parent")
+
+func handle_walking():
+	pass
+	
+func handle_input(delta):
+	if Input.is_action_just_pressed("attack"):
+		handle_attack()
 		return
 	var velocity = Vector2()  # The player's movement vector.
 	if Input.is_action_pressed("ui_right"):
@@ -57,7 +87,8 @@ func handle_walking(delta):
 	if velocity.length() > 0:
 		move_and_collide(velocity.normalized() * speed * delta)
 		player_direction = velocity.normalized()
-		$AnimatedSprite.play("walking")
+		handle_walking()
+		#$AnimatedSprite.play("walking")
 		if(velocity.x != 0):
 			$AnimatedSprite.flip_h = velocity.x < 0
 	else:
@@ -65,8 +96,9 @@ func handle_walking(delta):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	handle_attacks()	
-	handle_walking(delta)
+	handle_input(delta)
+	#handle_attacks()	
+	#handle_walking(delta)
 
 
 func _on_Attack_area_entered(area):

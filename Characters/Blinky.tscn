@@ -1,9 +1,13 @@
 [gd_scene load_steps=57 format=2]
 
-[ext_resource path="res://Characters/Generic/GenericPlayer.gd" type="Script" id=1]
+[ext_resource path="res://Characters/Blinky.gd" type="Script" id=1]
 [ext_resource path="res://sprites/Adventurer Sprite Sheet v1.1.png" type="Texture" id=2]
 [ext_resource path="res://Weapons/Boomerang.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Weapons/Bomb.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=51]
+
+[sub_resource type="CircleShape2D" id=52]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -234,10 +238,6 @@ animations = [ {
 "speed": 20.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=53]
-
-[sub_resource type="CircleShape2D" id=52]
-
 [node name="Blinky" type="KinematicBody2D" groups=[
 "Player",
 ]]
@@ -251,16 +251,10 @@ Boomerang = ExtResource( 3 )
 Bomb = ExtResource( 4 )
 attacks = [ "attack1", "attack2", "attack3" ]
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 50 )
-animation = "attack3"
-frame = 6
-playing = true
-
 [node name="PlayerBodyCollider" type="CollisionShape2D" parent="."]
 position = Vector2( -1.812, 5.273 )
 scale = Vector2( 0.766, 1 )
-shape = SubResource( 53 )
+shape = SubResource( 51 )
 
 [node name="Attack" type="Area2D" parent="."]
 
@@ -279,5 +273,11 @@ position = Vector2( -11.244, 5.755 )
 scale = Vector2( 0.469, 0.994 )
 shape = SubResource( 52 )
 disabled = true
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 50 )
+animation = "attack3"
+frame = 6
+playing = true
 [connection signal="area_entered" from="Attack" to="." method="_on_Attack_area_entered"]
 [connection signal="body_entered" from="Attack" to="." method="_on_Attack_body_entered"]
