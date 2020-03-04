@@ -1,8 +1,11 @@
 extends Area2D
 
-# Called when the node enters the scene tree for the first time.
+var id_ref
+
 func _ready():
+	global_position = id_ref.global_position
 	$AnimatedSprite.play("start")
+	
 
 func _process(delta):
 	pass
@@ -10,6 +13,7 @@ func _process(delta):
 func _on_AnimatedSprite_animation_finished():
 	if($AnimatedSprite.animation == "explode"):
 		queue_free()
+		id_ref.bomb_instance = null
 
 	$AnimatedSprite.play("explode")
 	$ExplosionCollider.disabled = false

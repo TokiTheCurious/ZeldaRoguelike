@@ -14,26 +14,29 @@ var viewport = get_viewport()
 var player_direction: Vector2 = Vector2(1,0)
 var state_machine
 
+var bomb_instance
+var boomerang_instance
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	state_machine = $AnimationTree.get("parameters/playback")
 	player_tools = [Bomb, Boomerang]
 	viewport = get_viewport()
 
-func handle_tool():
+func use_tool():
+	var parent = get_parent()
+	var has_boomerang = parent.has_node("Boomerang")
 	match player_tools[selected_tool_index]:
 		Bomb:
-			if(!viewport.has_node("Bomb")):
-				var bomb = Bomb.instance()
-				bomb.set_position(position)
-				viewport.add_child(bomb)		
+			#if(!bomb_instance):
+			bomb_instance = Bomb.instance()
+			bomb_instance.id_ref = self
+			get_parent().add_child(bomb_instance)		
 		Boomerang:
-			if(!viewport.has_node("Boomerang")):
-				var boom = Boomerang.instance()
-				boom.set_position(position)
-				boom.set_return_reference($".")
-				boom.set_throw_direction(player_direction) 
-				viewport.add_child(boom)
+			if(!boomerang_instance):
+				var boomerang_instance = Boomerang.instance()
+				boomerang_instance.id_ref = self
+				get_parent().add_child(boomerang_instance)
 		_:
 			print_debug("Unknown tool")
 
@@ -44,8 +47,8 @@ func handle_action_input(delta):
 			state_machine.travel("attack1")
 			return
 		if Input.is_action_just_pressed("main_tool"):
-			print_debug("handle_tool")
-			handle_tool()
+			print_debug("use_tool")
+			use_tool()
 		var velocity = Vector2()  # The player's movement vector.
 		if Input.is_action_pressed("ui_right"):
 			velocity.x += 1
@@ -64,6 +67,7 @@ func handle_action_input(delta):
 
 func switch_tool():
 	selected_tool_index = (selected_tool_index + 1) % player_tools.size()
+	print(selected_tool_index)
 
 func handle_walking(velocity, delta):
 	if(velocity.length() > 0):

@@ -29,17 +29,14 @@ func handle_attacks():
 		attack_col.disabled = true
 		$AnimatedSprite.play("idle")
 	elif Input.is_key_pressed(KEY_S):
-		if(!viewport.has_node("Boomerang")):
+		if(get_parent().has_node("Boomerang")):
 			var boom = Boomerang.instance()
-			boom.set_position(position)
-			boom.set_return_reference($".")
-			boom.set_throw_direction(player_direction) 
-			viewport.add_child(boom)
+			boom.id_ref = self
+			get_parent().add_child(boom)
 	elif Input.is_key_pressed(KEY_X):
-		if(!viewport.has_node("Bomb")):
+		if(get_parent().has_node("Bomb")):
 			var bomb = Bomb.instance()
-			bomb.set_position(position)
-			viewport.add_child(bomb)
+			get_parent().add_child(bomb)
 
 
 #func handle_walking(delta):
